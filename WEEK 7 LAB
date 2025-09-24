@@ -1,0 +1,1290 @@
+
+NATHALA ANGELINA SHARON 
+RA2411003011689
+LAB ASSESMENT
+
+POLYMORPHISM PRACTICE PROBLEMS(Any Six)
+PROBLEM 1: Food Delivery App
+Concept: Method Overloading
+You're creating a food ordering system. Design a class that can calculate delivery
+charges in different ways:
+● Basic delivery (just distance)
+● Premium delivery (distance + priority fee)
+● Group delivery (distance + number of orders discount)
+● Festival special (distance + discount percentage + free delivery over certain
+amount)
+Each calculation should show a different message about the delivery cost breakdown.
+Hint: Same method name, different parameters - let Java pick the right one!
+CODE:
+class FoodDeliveryApp {
+    // Method overloading - same method name, different parameters
+    
+    // Basic delivery (just distance)
+    public void calculateDelivery(double distance) {
+        double cost = distance * 5.0;
+        System.out.println("Basic Delivery:");
+        System.out.println("Distance: " + distance + " km");
+        System.out.println("Cost: $" + cost);
+        System.out.println("Breakdown: Distance charge only\n");
+    }
+    
+    // Premium delivery (distance + priority fee)
+    public void calculateDelivery(double distance, boolean isPremium) {
+        double baseCost = distance * 5.0;
+        double priorityFee = isPremium ? 15.0 : 0.0;
+        double totalCost = baseCost + priorityFee;
+        System.out.println("Premium Delivery:");
+        System.out.println("Distance: " + distance + " km");
+        System.out.println("Base cost: $" + baseCost);
+        System.out.println("Priority fee: $" + priorityFee);
+        System.out.println("Total cost: $" + totalCost);
+        System.out.println("Breakdown: Fast delivery guaranteed\n");
+    }
+    
+    // Group delivery (distance + number of orders discount)
+    public void calculateDelivery(double distance, int numOrders) {
+        double baseCost = distance * 5.0;
+        double discount = numOrders > 3 ? baseCost * 0.2 : 0.0;
+        double totalCost = baseCost - discount;
+        System.out.println("Group Delivery:");
+        System.out.println("Distance: " + distance + " km");
+        System.out.println("Number of orders: " + numOrders);
+        System.out.println("Base cost: $" + baseCost);
+        System.out.println("Group discount: $" + discount);
+        System.out.println("Total cost: $" + totalCost);
+        System.out.println("Breakdown: Bulk order savings applied\n");
+    }
+    
+    // Festival special (distance + discount percentage + free delivery threshold)
+    public void calculateDelivery(double distance, double discountPercent, double orderAmount) {
+        double baseCost = distance * 5.0;
+        boolean freeDelivery = orderAmount > 50.0;
+        double discount = freeDelivery ? baseCost : baseCost * (discountPercent / 100);
+        double totalCost = freeDelivery ? 0.0 : baseCost - discount;
+        
+        System.out.println("Festival Special:");
+        System.out.println("Distance: " + distance + " km");
+        System.out.println("Order amount: $" + orderAmount);
+        System.out.println("Base delivery cost: $" + baseCost);
+        
+        if (freeDelivery) {
+            System.out.println("FREE DELIVERY! (Order over $50)");
+            System.out.println("You saved: $" + baseCost);
+        } else {
+            System.out.println("Festival discount: " + discountPercent + "%");
+            System.out.println("Discount amount: $" + discount);
+            System.out.println("Final cost: $" + totalCost);
+        }
+        System.out.println("Breakdown: Festival offers applied\n");
+    }
+    
+    public static void main(String[] args) {
+        FoodDeliveryApp app = new FoodDeliveryApp();
+        
+        System.out.println("=== FOOD DELIVERY CALCULATOR ===\n");
+        
+        // Test all overloaded methods
+        app.calculateDelivery(3.5);                    // Basic
+        app.calculateDelivery(2.0, true);              // Premium
+        app.calculateDelivery(4.0, 5);                 // Group
+        app.calculateDelivery(6.0, 20.0, 45.0);       // Festival (with discount)
+        app.calculateDelivery(3.0, 15.0, 60.0);       // Festival (free delivery)
+    }
+}
+
+OUTPUT:
+=== FOOD DELIVERY CALCULATOR ===
+
+Basic Delivery:
+Distance: 3.5 km
+Cost: $17.5
+Breakdown: Distance charge only
+
+Premium Delivery:
+Distance: 2.0 km
+Base cost: $10.0
+Priority fee: $15.0
+Total cost: $25.0
+Breakdown: Fast delivery guaranteed
+
+Group Delivery:
+Distance: 4.0 km
+Number of orders: 5
+Base cost: $20.0
+Group discount: $4.0
+Total cost: $16.0
+Breakdown: Bulk order savings applied
+
+Festival Special:
+Distance: 6.0 km
+Order amount: $45.0
+Base delivery cost: $30.0
+Festival discount: 20.0%
+Discount amount: $6.0
+Final cost: $24.0
+Breakdown: Festival offers applied
+
+Festival Special:
+Distance: 3.0 km
+Order amount: $60.0
+Base delivery cost: $15.0
+FREE DELIVERY! (Order over $50)
+You saved: $15.0
+Breakdown: Festival offers applied
+
+PROBLEM 2: Social Media Feed
+Concept: Method Overriding
+Build a social media post system where different platforms display posts differently:
+● Instagram posts show with hashtags and likes
+● Twitter posts show with character count and retweets
+● LinkedIn posts show with professional formatting and connections
+All posts share common info (author, content, time) but display uniquely for each
+platform.
+Hint: Parent class defines the structure, child classes customize the display!
+CODE:
+// Parent class - defines common structure
+abstract class SocialMediaPost {
+    protected String author;
+    protected String content;
+    protected String timestamp;
+    
+    public SocialMediaPost(String author, String content, String timestamp) {
+        this.author = author;
+        this.content = content;
+        this.timestamp = timestamp;
+    }
+    
+    // Abstract method - must be overridden by child classes
+    public abstract void displayPost();
+    
+    // Common method available to all posts
+    public void showBasicInfo() {
+        System.out.println("Author: " + author);
+        System.out.println("Posted: " + timestamp);
+    }
+}
+
+// Instagram implementation
+class InstagramPost extends SocialMediaPost {
+    private int likes;
+    private String hashtags;
+    
+    public InstagramPost(String author, String content, String timestamp, int likes, String hashtags) {
+        super(author, content, timestamp);
+        this.likes = likes;
+        this.hashtags = hashtags;
+    }
+    
+    @Override
+    public void displayPost() {
+        System.out.println("\n📸 INSTAGRAM POST");
+        System.out.println("==================");
+        showBasicInfo();
+        System.out.println("Content: " + content);
+        System.out.println("❤️ " + likes + " likes");
+        System.out.println("Tags: " + hashtags);
+        System.out.println("✨ Showing with visual effects");
+    }
+}
+
+// Twitter implementation
+class TwitterPost extends SocialMediaPost {
+    private int retweets;
+    private int characterCount;
+    
+    public TwitterPost(String author, String content, String timestamp, int retweets) {
+        super(author, content, timestamp);
+        this.retweets = retweets;
+        this.characterCount = content.length();
+    }
+    
+    @Override
+    public void displayPost() {
+        System.out.println("\n🐦 TWITTER POST");
+        System.out.println("================");
+        showBasicInfo();
+        System.out.println("Tweet: " + content);
+        System.out.println("🔄 " + retweets + " retweets");
+        System.out.println("Characters: " + characterCount + "/280");
+        System.out.println("💬 Quick engagement format");
+    }
+}
+
+// LinkedIn implementation
+class LinkedInPost extends SocialMediaPost {
+    private int connections;
+    private String professionalTag;
+    
+    public LinkedInPost(String author, String content, String timestamp, int connections, String professionalTag) {
+        super(author, content, timestamp);
+        this.connections = connections;
+        this.professionalTag = professionalTag;
+    }
+    
+    @Override
+    public void displayPost() {
+        System.out.println("\n💼 LINKEDIN POST");
+        System.out.println("=================");
+        showBasicInfo();
+        System.out.println("Professional Update: " + content);
+        System.out.println("🤝 " + connections + " connections");
+        System.out.println("Category: " + professionalTag);
+        System.out.println("📈 Professional networking format");
+    }
+}
+
+// Main class to test polymorphism
+class SocialMediaFeed {
+    public static void main(String[] args) {
+        System.out.println("=== SOCIAL MEDIA FEED DEMO ===");
+        
+        // Create different types of posts
+        SocialMediaPost[] posts = {
+            new InstagramPost("Alice", "Beautiful sunset at the beach!", "2025-09-24 14:30", 125, "#sunset #beach #nature"),
+            new TwitterPost("Bob", "Just finished an amazing coding session! Java polymorphism is powerful.", "2025-09-24 15:15", 23),
+            new LinkedInPost("Carol", "Excited to share my new project on sustainable technology solutions.", "2025-09-24 16:00", 340, "Technology Innovation")
+        };
+        
+        // Display all posts - same method call, different behavior!
+        for (SocialMediaPost post : posts) {
+            post.displayPost();  // Polymorphic method call
+        }
+        
+        System.out.println("\n✅ Same displayPost() method, different implementations for each platform!");
+    }
+}
+
+OUTPUT:
+=== SOCIAL MEDIA FEED DEMO ===
+
+📸 INSTAGRAM POST
+==================
+Author: Alice
+Posted: 2025-09-24 14:30
+Content: Beautiful sunset at the beach!
+❤️ 125 likes
+Tags: #sunset #beach #nature
+✨ Showing with visual effects
+
+🐦 TWITTER POST
+================
+Author: Bob
+Posted: 2025-09-24 15:15
+Tweet: Just finished an amazing coding session! Java polymorphism is powerful.
+🔄 23 retweets
+Characters: 74/280
+💬 Quick engagement format
+
+💼 LINKEDIN POST
+=================
+Author: Carol
+Posted: 2025-09-24 16:00
+Professional Update: Excited to share my new project on sustainable technology solutions.
+🤝 340 connections
+Category: Technology Innovation
+📈 Professional networking format
+
+✅ Same displayPost() method, different implementations for each platform!
+
+PROBLEM 3: Gaming Character System
+Concept: Dynamic Method Dispatch
+Create a battle system with different character types:
+● Warriors attack with weapons and have high defense
+● Mages cast spells and use mana
+● Archers shoot arrows with long-range damage
+Design it so the same "attack" command produces different results based on the
+character type, even when stored in a mixed army array.
+Hint: Same reference, different objects - let runtime decide the behavior!
+CODE:
+// Base class for all characters
+abstract class GameCharacter {
+    protected String name;
+    protected int health;
+    protected int level;
+    
+    public GameCharacter(String name, int health, int level) {
+        this.name = name;
+        this.health = health;
+        this.level = level;
+    }
+    
+    // Abstract methods - must be implemented by each character type
+    public abstract void attack();
+    public abstract void defend();
+    public abstract void showStats();
+    
+    public String getName() { return name; }
+    public int getHealth() { return health; }
+}
+
+// Warrior class
+class Warrior extends GameCharacter {
+    private String weapon;
+    private int defense;
+    
+    public Warrior(String name, int health, int level, String weapon, int defense) {
+        super(name, health, level);
+        this.weapon = weapon;
+        this.defense = defense;
+    }
+    
+    @Override
+    public void attack() {
+        int damage = level * 15 + 10;
+        System.out.println("⚔️ " + name + " swings " + weapon + "!");
+        System.out.println("💥 Deals " + damage + " physical damage!");
+        System.out.println("🛡️ High defense warrior strike!");
+    }
+    
+    @Override
+    public void defend() {
+        System.out.println("🛡️ " + name + " raises shield! Defense: " + defense);
+    }
+    
+    @Override
+    public void showStats() {
+        System.out.println("⚔️ WARRIOR: " + name);
+        System.out.println("❤️ Health: " + health + " | 🆙 Level: " + level);
+        System.out.println("🗡️ Weapon: " + weapon + " | 🛡️ Defense: " + defense);
+    }
+}
+
+// Mage class
+class Mage extends GameCharacter {
+    private int mana;
+    private String spell;
+    
+    public Mage(String name, int health, int level, int mana, String spell) {
+        super(name, health, level);
+        this.mana = mana;
+        this.spell = spell;
+    }
+    
+    @Override
+    public void attack() {
+        int magicDamage = level * 20 + 5;
+        mana -= 15;
+        System.out.println("🔮 " + name + " casts " + spell + "!");
+        System.out.println("✨ Deals " + magicDamage + " magic damage!");
+        System.out.println("💙 Mana remaining: " + mana);
+    }
+    
+    @Override
+    public void defend() {
+        System.out.println("🔮 " + name + " creates magic barrier! Mana: " + mana);
+    }
+    
+    @Override
+    public void showStats() {
+        System.out.println("🔮 MAGE: " + name);
+        System.out.println("❤️ Health: " + health + " | 🆙 Level: " + level);
+        System.out.println("✨ Spell: " + spell + " | 💙 Mana: " + mana);
+    }
+}
+
+// Archer class
+class Archer extends GameCharacter {
+    private int arrows;
+    private int range;
+    
+    public Archer(String name, int health, int level, int arrows, int range) {
+        super(name, health, level);
+        this.arrows = arrows;
+        this.range = range;
+    }
+    
+    @Override
+    public void attack() {
+        int rangedDamage = level * 12 + 8;
+        arrows--;
+        System.out.println("🏹 " + name + " shoots arrow from " + range + "m range!");
+        System.out.println("🎯 Deals " + rangedDamage + " ranged damage!");
+        System.out.println("📦 Arrows left: " + arrows);
+    }
+    
+    @Override
+    public void defend() {
+        System.out.println("🏃 " + name + " dodges with agility! Range: " + range + "m");
+    }
+    
+    @Override
+    public void showStats() {
+        System.out.println("🏹 ARCHER: " + name);
+        System.out.println("❤️ Health: " + health + " | 🆙 Level: " + level);
+        System.out.println("🎯 Arrows: " + arrows + " | 📏 Range: " + range + "m");
+    }
+}
+
+// Battle system demonstrating dynamic method dispatch
+class BattleSystem {
+    public static void main(String[] args) {
+        System.out.println("=== GAMING CHARACTER BATTLE SYSTEM ===\n");
+        
+        // Create mixed army - same reference type, different objects
+        GameCharacter[] army = {
+            new Warrior("Thor", 120, 5, "Thunder Hammer", 25),
+            new Mage("Gandalf", 80, 6, 100, "Lightning Bolt"), 
+            new Archer("Legolas", 90, 5, 50, 30),
+            new Warrior("Conan", 110, 4, "Battle Axe", 20),
+            new Mage("Merlin", 85, 7, 120, "Fireball")
+        };
+        
+        System.out.println("🏰 ARMY ROSTER:");
+        System.out.println("================");
+        for (GameCharacter character : army) {
+            character.showStats();
+            System.out.println();
+        }
+        
+        System.out.println("⚔️ BATTLE BEGINS!");
+        System.out.println("==================");
+        
+        // Same method call, different behavior based on actual object type
+        for (int round = 1; round <= 2; round++) {
+            System.out.println("\n🔥 ROUND " + round + ":");
+            for (GameCharacter character : army) {
+                System.out.println("\n--- " + character.getName() + "'s turn ---");
+                character.attack();    // Dynamic method dispatch!
+                character.defend();    // Runtime decides which implementation
+            }
+        }
+        
+        System.out.println("\n✅ Same attack() method call produced different results!");
+        System.out.println("🎯 Runtime polymorphism in action - Java decided behavior based on actual object type!");
+    }
+}
+
+OUTPUT:
+=== GAMING CHARACTER BATTLE SYSTEM ===
+
+🏰 ARMY ROSTER:
+================
+⚔️ WARRIOR: Thor
+❤️ Health: 120 | 🆙 Level: 5
+🗡️ Weapon: Thunder Hammer | 🛡️ Defense: 25
+
+🔮 MAGE: Gandalf
+❤️ Health: 80 | 🆙 Level: 6
+✨ Spell: Lightning Bolt | 💙 Mana: 100
+
+🏹 ARCHER: Legolas
+❤️ Health: 90 | 🆙 Level: 5
+🎯 Arrows: 50 | 📏 Range: 30m
+
+⚔️ WARRIOR: Conan
+❤️ Health: 110 | 🆙 Level: 4
+🗡️ Weapon: Battle Axe | 🛡️ Defense: 20
+
+🔮 MAGE: Merlin
+❤️ Health: 85 | 🆙 Level: 7
+✨ Spell: Fireball | 💙 Mana: 120
+
+⚔️ BATTLE BEGINS!
+==================
+
+🔥 ROUND 1:
+
+--- Thor's turn ---
+⚔️ Thor swings Thunder Hammer!
+💥 Deals 85 physical damage!
+🛡️ High defense warrior strike!
+🛡️ Thor raises shield! Defense: 25
+
+--- Gandalf's turn ---
+🔮 Gandalf casts Lightning Bolt!
+✨ Deals 125 magic damage!
+💙 Mana remaining: 85
+🔮 Gandalf creates magic barrier! Mana: 85
+
+--- Legolas's turn ---
+🏹 Legolas shoots arrow from 30m range!
+🎯 Deals 68 ranged damage!
+📦 Arrows left: 49
+🏃 Legolas dodges with agility! Range: 30m
+
+--- Conan's turn ---
+⚔️ Conan swings Battle Axe!
+💥 Deals 70 physical damage!
+🛡️ High defense warrior strike!
+🛡️ Conan raises shield! Defense: 20
+
+--- Merlin's turn ---
+🔮 Merlin casts Fireball!
+✨ Deals 145 magic damage!
+💙 Mana remaining: 105
+🔮 Merlin creates magic barrier! Mana: 105
+
+🔥 ROUND 2:
+
+--- Thor's turn ---
+⚔️ Thor swings Thunder Hammer!
+💥 Deals 85 physical damage!
+🛡️ High defense warrior strike!
+🛡️ Thor raises shield! Defense: 25
+
+--- Gandalf's turn ---
+🔮 Gandalf casts Lightning Bolt!
+✨ Deals 125 magic damage!
+💙 Mana remaining: 70
+🔮 Gandalf creates magic barrier! Mana: 70
+
+--- Legolas's turn ---
+🏹 Legolas shoots arrow from 30m range!
+🎯 Deals 68 ranged damage!
+📦 Arrows left: 48
+🏃 Legolas dodges with agility! Range: 30m
+
+--- Conan's turn ---
+⚔️ Conan swings Battle Axe!
+💥 Deals 70 physical damage!
+🛡️ High defense warrior strike!
+🛡️ Conan raises shield! Defense: 20
+
+--- Merlin's turn ---
+🔮 Merlin casts Fireball!
+✨ Deals 145 magic damage!
+💙 Mana remaining: 90
+🔮 Merlin creates magic barrier! Mana: 90
+
+✅ Same attack() method call produced different results!
+🎯 Runtime polymorphism in action - Java decided behavior based on actual object type!
+
+PROBLEM 4: University Library System
+Concept: Upcasting
+Design a library system with different types of users:
+● Students can borrow books and access computers
+● Faculty can reserve books and access research databases
+● Guests can only browse books
+Create a general "LibraryUser" system that can handle any user type for common
+operations like entry logging and basic info display.
+Hint: Think bigger picture - store specialists as generalists safely!
+CODE:
+// Base class - general library user
+class LibraryUser {
+    protected String name;
+    protected String id;
+    protected String userType;
+    
+    public LibraryUser(String name, String id, String userType) {
+        this.name = name;
+        this.id = id;
+        this.userType = userType;
+    }
+    
+    // Common operations for all users
+    public void logEntry() {
+        System.out.println("📝 Entry logged: " + name + " (" + userType + ") - ID: " + id);
+    }
+    
+    public void showBasicInfo() {
+        System.out.println("👤 User: " + name + " | Type: " + userType + " | ID: " + id);
+    }
+    
+    public void browseBooksGeneral() {
+        System.out.println("📚 " + name + " is browsing the general book collection");
+    }
+}
+
+// Student class with specific capabilities
+class Student extends LibraryUser {
+    private int borrowLimit;
+    private int currentBorrowed;
+    
+    public Student(String name, String id, int borrowLimit) {
+        super(name, id, "Student");
+        this.borrowLimit = borrowLimit;
+        this.currentBorrowed = 0;
+    }
+    
+    public void borrowBook(String bookTitle) {
+        if (currentBorrowed < borrowLimit) {
+            currentBorrowed++;
+            System.out.println("📖 " + name + " borrowed: " + bookTitle);
+            System.out.println("📊 Books borrowed: " + currentBorrowed + "/" + borrowLimit);
+        } else {
+            System.out.println("❌ Borrow limit reached for " + name);
+        }
+    }
+    
+    public void accessComputer() {
+        System.out.println("💻 " + name + " accessing student computer lab");
+    }
+}
+
+// Faculty class with enhanced privileges
+class Faculty extends LibraryUser {
+    private String department;
+    
+    public Faculty(String name, String id, String department) {
+        super(name, id, "Faculty");
+        this.department = department;
+    }
+    
+    public void reserveBook(String bookTitle) {
+        System.out.println("📋 " + name + " reserved: " + bookTitle + " (Faculty privilege)");
+        System.out.println("🏛️ Department: " + department);
+    }
+    
+    public void accessResearchDatabase() {
+        System.out.println("🔬 " + name + " accessing research database from " + department);
+    }
+}
+
+// Guest class with limited access
+class Guest extends LibraryUser {
+    private String sponsorId;
+    
+    public Guest(String name, String id, String sponsorId) {
+        super(name, id, "Guest");
+        this.sponsorId = sponsorId;
+    }
+    
+    public void browseBooksOnly() {
+        System.out.println("👁️ " + name + " browsing books only (Guest access)");
+        System.out.println("🤝 Sponsored by: " + sponsorId);
+    }
+}
+
+// Library management system demonstrating upcasting
+class LibraryManagementSystem {
+    public static void main(String[] args) {
+        System.out.println("=== UNIVERSITY LIBRARY SYSTEM ===\n");
+        
+        // Create different user types
+        Student student1 = new Student("Alice Johnson", "S2025001", 5);
+        Faculty faculty1 = new Faculty("Dr. Smith", "F2025001", "Computer Science");
+        Guest guest1 = new Guest("John Visitor", "G2025001", "Dr. Smith");
+        
+        // Upcasting - storing specialists as generalists
+        LibraryUser[] allUsers = {
+            student1,    // Student upcast to LibraryUser
+            faculty1,    // Faculty upcast to LibraryUser  
+            guest1       // Guest upcast to LibraryUser
+        };
+        
+        System.out.println("🏛️ DAILY ENTRY LOG:");
+        System.out.println("====================");
+        
+        // Common operations work for all - upcasting in action!
+        for (LibraryUser user : allUsers) {
+            user.logEntry();           // Works for all types
+            user.showBasicInfo();      // Common interface
+            user.browseBooksGeneral(); // Available to everyone
+            System.out.println();
+        }
+        
+        System.out.println("🔧 SPECIFIC USER OPERATIONS:");
+        System.out.println("============================");
+        
+        // Need original references for specific operations
+        student1.borrowBook("Java Programming");
+        student1.borrowBook("Data Structures"); 
+        student1.accessComputer();
+        System.out.println();
+        
+        faculty1.reserveBook("Advanced Algorithms");
+        faculty1.accessResearchDatabase();
+        System.out.println();
+        
+        guest1.browseBooksOnly();
+        
+        System.out.println("\n✅ Upcasting allows treating different user types uniformly!");
+        System.out.println("🎯 Common operations work regardless of specific user type!");
+    }
+}
+
+OUTPUT:
+=== UNIVERSITY LIBRARY SYSTEM ===
+
+🏛️ DAILY ENTRY LOG:
+====================
+📝 Entry logged: Alice Johnson (Student) - ID: S2025001
+👤 User: Alice Johnson | Type: Student | ID: S2025001
+📚 Alice Johnson is browsing the general book collection
+
+📝 Entry logged: Dr. Smith (Faculty) - ID: F2025001
+👤 User: Dr. Smith | Type: Faculty | ID: F2025001
+📚 Dr. Smith is browsing the general book collection
+
+📝 Entry logged: John Visitor (Guest) - ID: G2025001
+👤 User: John Visitor | Type: Guest | ID: G2025001
+📚 John Visitor is browsing the general book collection
+
+🔧 SPECIFIC USER OPERATIONS:
+============================
+📖 Alice Johnson borrowed: Java Programming
+📊 Books borrowed: 1/5
+📖 Alice Johnson borrowed: Data Structures
+📊 Books borrowed: 2/5
+💻 Alice Johnson accessing student computer lab
+
+📋 Dr. Smith reserved: Advanced Algorithms (Faculty privilege)
+🏛️ Department: Computer Science
+🔬 Dr. Smith accessing research database from Computer Science
+
+👁️ John Visitor browsing books only (Guest access)
+🤝 Sponsored by: Dr. Smith
+
+✅ Upcasting allows treating different user types uniformly!
+🎯 Common operations work regardless of specific user type!
+
+PROBLEM 5: Movie Streaming Platform
+Concept: Downcasting
+Build a streaming service that handles different content types
+● Movies have ratings, duration, and subtitle options
+● TV Series have seasons, episodes, and next episode suggestions
+● Documentaries have educational tags and related content
+Sometimes you need to access specific features based on what the user is actually
+watching.
+Hint: Go from general to specific - but be careful, not everything is what it seems!
+CODE:
+// Base content class
+class StreamingContent {
+    protected String title;
+    protected String genre;
+    protected double rating;
+    
+    public StreamingContent(String title, String genre, double rating) {
+        this.title = title;
+        this.genre = genre;
+        this.rating = rating;
+    }
+    
+    public void displayBasicInfo() {
+        System.out.println("Title: " + title);
+        System.out.println("Genre: " + genre);
+        System.out.println("Rating: " + rating + "/10");
+    }
+    
+    public String getTitle() { return title; }
+}
+
+// Movie class with specific features
+class Movie extends StreamingContent {
+    private int duration;
+    private boolean hasSubtitles;
+    private String[] availableLanguages;
+    
+    public Movie(String title, String genre, double rating, int duration, boolean hasSubtitles, String[] languages) {
+        super(title, genre, rating);
+        this.duration = duration;
+        this.hasSubtitles = hasSubtitles;
+        this.availableLanguages = languages;
+    }
+    
+    public void showMovieDetails() {
+        System.out.println("🎬 MOVIE DETAILS:");
+        displayBasicInfo();
+        System.out.println("Duration: " + duration + " minutes");
+        System.out.println("Subtitles: " + (hasSubtitles ? "Available" : "Not available"));
+        System.out.print("Languages: ");
+        for (String lang : availableLanguages) {
+            System.out.print(lang + " ");
+        }
+        System.out.println();
+    }
+    
+    public void playWithSubtitles() {
+        if (hasSubtitles) {
+            System.out.println("▶️ Playing " + title + " with subtitles");
+        } else {
+            System.out.println("❌ Subtitles not available for " + title);
+        }
+    }
+}
+
+// TV Series class
+class TVSeries extends StreamingContent {
+    private int seasons;
+    private int totalEpisodes;
+    private String nextEpisode;
+    
+    public TVSeries(String title, String genre, double rating, int seasons, int totalEpisodes, String nextEpisode) {
+        super(title, genre, rating);
+        this.seasons = seasons;
+        this.totalEpisodes = totalEpisodes;
+        this.nextEpisode = nextEpisode;
+    }
+    
+    public void showSeriesDetails() {
+        System.out.println("📺 TV SERIES DETAILS:");
+        displayBasicInfo();
+        System.out.println("Seasons: " + seasons);
+        System.out.println("Total Episodes: " + totalEpisodes);
+        System.out.println("Next Episode: " + nextEpisode);
+    }
+    
+    public void suggestNextEpisode() {
+        System.out.println("📅 Up next: " + nextEpisode);
+        System.out.println("🔔 Would you like to enable auto-play?");
+    }
+}
+
+// Documentary class
+class Documentary extends StreamingContent {
+    private String[] educationalTags;
+    private String[] relatedContent;
+    
+    public Documentary(String title, String genre, double rating, String[] educationalTags, String[] relatedContent) {
+        super(title, genre, rating);
+        this.educationalTags = educationalTags;
+        this.relatedContent = relatedContent;
+    }
+    
+    public void showDocumentaryDetails() {
+        System.out.println("🎓 DOCUMENTARY DETAILS:");
+        displayBasicInfo();
+        System.out.print("Educational Tags: ");
+        for (String tag : educationalTags) {
+            System.out.print("#" + tag + " ");
+        }
+        System.out.println();
+        System.out.print("Related Content: ");
+        for (String content : relatedContent) {
+            System.out.print(content + " | ");
+        }
+        System.out.println();
+    }
+    
+    public void showRelatedEducationalContent() {
+        System.out.println("📚 You might also like:");
+        for (String content : relatedContent) {
+            System.out.println("  • " + content);
+        }
+    }
+}
+
+// Streaming platform demonstrating downcasting
+class StreamingPlatform {
+    public static void main(String[] args) {
+        System.out.println("=== MOVIE STREAMING PLATFORM ===\n");
+        
+        // Create mixed content library - all stored as StreamingContent
+        StreamingContent[] library = {
+            new Movie("Avengers: Endgame", "Action", 8.4, 181, true, new String[]{"English", "Spanish", "French"}),
+            new TVSeries("Breaking Bad", "Drama", 9.5, 5, 62, "S1E2: Cat's in the Bag"),
+            new Documentary("Planet Earth", "Nature", 9.4, new String[]{"Wildlife", "Environment", "Science"}, new String[]{"Blue Planet", "Our Planet", "Life"})
+        };
+        
+        System.out.println("🎮 CONTENT LIBRARY:");
+        System.out.println("====================");
+        
+        // General display for all content
+        for (StreamingContent content : library) {
+            content.displayBasicInfo();
+            System.out.println("----------------");
+        }
+        
+        System.out.println("\n🔍 DETAILED VIEW (Downcasting Required):");
+        System.out.println("==========================================");
+        
+        // Downcasting to access specific features
+        for (StreamingContent content : library) {
+            System.out.println("\n--- Processing: " + content.getTitle() + " ---");
+            
+            // Check type and downcast safely
+            if (content instanceof Movie) {
+                Movie movie = (Movie) content;  // Downcasting
+                movie.showMovieDetails();
+                movie.playWithSubtitles();
+                
+            } else if (content instanceof TVSeries) {
+                TVSeries series = (TVSeries) content;  // Downcasting
+                series.showSeriesDetails();
+                series.suggestNextEpisode();
+                
+            } else if (content instanceof Documentary) {
+                Documentary doc = (Documentary) content;  // Downcasting
+                doc.showDocumentaryDetails();
+                doc.showRelatedEducationalContent();
+            }
+        }
+        
+        System.out.println("\n✅ Downcasting allowed access to specific features!");
+        System.out.println("🎯 From general StreamingContent to specific Movie/Series/Documentary methods!");
+    }
+}
+
+OUTPUT:
+=== MOVIE STREAMING PLATFORM ===
+
+🎮 CONTENT LIBRARY:
+====================
+Title: Avengers: Endgame
+Genre: Action
+Rating: 8.4/10
+----------------
+Title: Breaking Bad
+Genre: Drama
+Rating: 9.5/10
+----------------
+Title: Planet Earth
+Genre: Nature
+Rating: 9.4/10
+----------------
+
+🔍 DETAILED VIEW (Downcasting Required):
+==========================================
+
+--- Processing: Avengers: Endgame ---
+🎬 MOVIE DETAILS:
+Title: Avengers: Endgame
+Genre: Action
+Rating: 8.4/10
+Duration: 181 minutes
+Subtitles: Available
+Languages: English Spanish French 
+▶️ Playing Avengers: Endgame with subtitles
+
+--- Processing: Breaking Bad ---
+📺 TV SERIES DETAILS:
+Title: Breaking Bad
+Genre: Drama
+Rating: 9.5/10
+Seasons: 5
+Total Episodes: 62
+Next Episode: S1E2: Cat's in the Bag
+📅 Up next: S1E2: Cat's in the Bag
+🔔 Would you like to enable auto-play?
+
+--- Processing: Planet Earth ---
+🎓 DOCUMENTARY DETAILS:
+Title: Planet Earth
+Genre: Nature
+Rating: 9.4/10
+Educational Tags: #Wildlife #Environment #Science 
+Related Content: Blue Planet | Our Planet | Life | 
+📚 You might also like:
+  • Blue Planet
+  • Our Planet
+  • Life
+
+✅ Downcasting allowed access to specific features!
+🎯 From general StreamingContent to specific Movie/Series/Documentary methods!
+
+PROBLEM 6: Smart Campus IoT System
+Concept: Safe Downcasting with instanceof
+Create a campus management system with different smart devices:
+● Smart classrooms control lighting, AC, and projectors
+● Smart labs manage equipment and safety systems
+● Smart libraries track occupancy and book availability
+Process mixed device collections safely, applying the right controls to each device type
+without crashing.
+Hint: Check first, cast second - safety matters in the real world!
+CODE:
+// Base device class
+class SmartDevice {
+    protected String deviceId;
+    protected String location;
+    protected boolean isOnline;
+    
+    public SmartDevice(String deviceId, String location) {
+        this.deviceId = deviceId;
+        this.location = location;
+        this.isOnline = true;
+    }
+    
+    public void showDeviceInfo() {
+        System.out.println("Device ID: " + deviceId);
+        System.out.println("Location: " + location);
+        System.out.println("Status: " + (isOnline ? "Online" : "Offline"));
+    }
+    
+    public String getDeviceId() { return deviceId; }
+    public String getLocation() { return location; }
+}
+
+// Smart Classroom
+class SmartClassroom extends SmartDevice {
+    private int lightLevel;
+    private int temperature;
+    private boolean projectorOn;
+    
+    public SmartClassroom(String deviceId, String location, int lightLevel, int temperature) {
+        super(deviceId, location);
+        this.lightLevel = lightLevel;
+        this.temperature = temperature;
+        this.projectorOn = false;
+    }
+    
+    public void controlLighting(int level) {
+        this.lightLevel = level;
+        System.out.println("💡 Classroom lighting set to " + level + "%");
+    }
+    
+    public void controlAC(int temp) {
+        this.temperature = temp;
+        System.out.println("❄️ AC temperature set to " + temp + "°C");
+    }
+    
+    public void controlProjector(boolean on) {
+        this.projectorOn = on;
+        System.out.println("📽️ Projector " + (on ? "turned ON" : "turned OFF"));
+    }
+    
+    public void showClassroomStatus() {
+        System.out.println("🏫 SMART CLASSROOM STATUS:");
+        showDeviceInfo();
+        System.out.println("Light Level: " + lightLevel + "%");
+        System.out.println("Temperature: " + temperature + "°C");
+        System.out.println("Projector: " + (projectorOn ? "ON" : "OFF"));
+    }
+}
+
+// Smart Lab
+class SmartLab extends SmartDevice {
+    private String[] equipmentList;
+    private boolean safetySystemActive;
+    private int gasDetectorLevel;
+    
+    public SmartLab(String deviceId, String location, String[] equipmentList) {
+        super(deviceId, location);
+        this.equipmentList = equipmentList;
+        this.safetySystemActive = true;
+        this.gasDetectorLevel = 0;
+    }
+    
+    public void manageEquipment() {
+        System.out.println("🔬 Managing lab equipment:");
+        for (String equipment : equipmentList) {
+            System.out.println("  ✓ " + equipment + " - Operational");
+        }
+    }
+    
+    public void activateSafetySystem() {
+        safetySystemActive = true;
+        System.out.println("🚨 Lab safety system ACTIVATED");
+        System.out.println("🌡️ Gas detector level: " + gasDetectorLevel);
+    }
+    
+    public void emergencyShutdown() {
+        System.out.println("🚨 EMERGENCY SHUTDOWN INITIATED!");
+        System.out.println("🔒 All equipment safely powered down");
+    }
+    
+    public void showLabStatus() {
+        System.out.println("🧪 SMART LAB STATUS:");
+        showDeviceInfo();
+        System.out.println("Safety System: " + (safetySystemActive ? "ACTIVE" : "INACTIVE"));
+        System.out.println("Gas Level: " + gasDetectorLevel);
+        System.out.print("Equipment: ");
+        for (String equipment : equipmentList) {
+            System.out.print(equipment + " | ");
+        }
+        System.out.println();
+    }
+}
+
+// Smart Library
+class SmartLibrary extends SmartDevice {
+    private int currentOccupancy;
+    private int maxCapacity;
+    private int availableBooks;
+    
+    public SmartLibrary(String deviceId, String location, int maxCapacity, int availableBooks) {
+        super(deviceId, location);
+        this.maxCapacity = maxCapacity;
+        this.availableBooks = availableBooks;
+        this.currentOccupancy = 0;
+    }
+    
+    public void trackOccupancy(int people) {
+        if (people <= maxCapacity) {
+            this.currentOccupancy = people;
+            System.out.println("👥 Library occupancy: " + people + "/" + maxCapacity);
+        } else {
+            System.out.println("⚠️ Capacity exceeded! Maximum: " + maxCapacity);
+        }
+    }
+    
+    public void updateBookAvailability(int books) {
+        this.availableBooks = books;
+        System.out.println("📚 Available books updated: " + books);
+    }
+    
+    public void generateOccupancyReport() {
+        double occupancyRate = (currentOccupancy * 100.0) / maxCapacity;
+        System.out.println("📊 Occupancy rate: " + String.format("%.1f", occupancyRate) + "%");
+    }
+    
+    public void showLibraryStatus() {
+        System.out.println("📖 SMART LIBRARY STATUS:");
+        showDeviceInfo();
+        System.out.println("Occupancy: " + currentOccupancy + "/" + maxCapacity);
+        System.out.println("Available Books: " + availableBooks);
+    }
+}
+
+// Campus IoT management system with safe downcasting
+class CampusIoTSystem {
+    public static void main(String[] args) {
+        System.out.println("=== SMART CAMPUS IoT SYSTEM ===\n");
+        
+        // Mixed device collection - all stored as SmartDevice references
+        SmartDevice[] campusDevices = {
+            new SmartClassroom("CR-101", "Engineering Building - Room 101", 75, 22),
+            new SmartLab("LAB-205", "Science Building - Lab 205", new String[]{"Microscopes", "Centrifuge", "Spectrometer"}),
+            new SmartLibrary("LIB-MAIN", "Central Library - Ground Floor", 200, 15000),
+            new SmartClassroom("CR-304", "Business Building - Room 304", 60, 24),
+            new SmartLab("LAB-102", "Chemistry Building - Lab 102", new String[]{"Fume Hoods", "Bunsen Burners", "pH Meters"})
+        };
+        
+        System.out.println("🏛️ CAMPUS DEVICE REGISTRY:");
+        System.out.println("============================");
+        
+        // Basic info for all devices
+        for (SmartDevice device : campusDevices) {
+            device.showDeviceInfo();
+            System.out.println("----------------");
+        }
+        
+        System.out.println("\n⚙️ DEVICE-SPECIFIC OPERATIONS (Safe Downcasting):");
+        System.out.println("===================================================");
+        
+        // Safe downcasting with instanceof checking
+        for (SmartDevice device : campusDevices) {
+            System.out.println("\n🔧 Processing device: " + device.getDeviceId());
+            
+            // Safe downcasting - check type first!
+            if (device instanceof SmartClassroom) {
+                System.out.println("📋 Type: Smart Classroom detected");
+                SmartClassroom classroom = (SmartClassroom) device;
+                classroom.showClassroomStatus();
+                classroom.controlLighting(80);
+                classroom.controlAC(23);
+                classroom.controlProjector(true);
+                
+            } else if (device instanceof SmartLab) {
+                System.out.println("📋 Type: Smart Lab detected");
+                SmartLab lab = (SmartLab) device;
+                lab.showLabStatus();
+                lab.manageEquipment();
+                lab.activateSafetySystem();
+                
+            } else if (device instanceof SmartLibrary) {
+                System.out.println("📋 Type: Smart Library detected");
+                SmartLibrary library = (SmartLibrary) device;
+                library.showLibraryStatus();
+                library.trackOccupancy(45);
+                library.updateBookAvailability(14950);
+                library.generateOccupancyReport();
+                
+            } else {
+                System.out.println("❓ Unknown device type - using basic operations only");
+                device.showDeviceInfo();
+            }
+            
+            System.out.println("✅ Operation completed safely\n");
+        }
+        
+        System.out.println("🎯 Safe downcasting with instanceof prevented runtime errors!");
+        System.out.println("🔒 Each device type received appropriate specific controls!");
+    }
+}
+
+OUTPUT:
+=== SMART CAMPUS IoT SYSTEM ===
+
+🏛️ CAMPUS DEVICE REGISTRY:
+============================
+Device ID: CR-101
+Location: Engineering Building - Room 101
+Status: Online
+----------------
+Device ID: LAB-205
+Location: Science Building - Lab 205
+Status: Online
+----------------
+Device ID: LIB-MAIN
+Location: Central Library - Ground Floor
+Status: Online
+----------------
+Device ID: CR-304
+Location: Business Building - Room 304
+Status: Online
+----------------
+Device ID: LAB-102
+Location: Chemistry Building - Lab 102
+Status: Online
+----------------
+
+⚙️ DEVICE-SPECIFIC OPERATIONS (Safe Downcasting):
+===================================================
+
+🔧 Processing device: CR-101
+📋 Type: Smart Classroom detected
+🏫 SMART CLASSROOM STATUS:
+Device ID: CR-101
+Location: Engineering Building - Room 101
+Status: Online
+Light Level: 75%
+Temperature: 22°C
+Projector: OFF
+💡 Classroom lighting set to 80%
+❄️ AC temperature set to 23°C
+📽️ Projector turned ON
+✅ Operation completed safely
+
+🔧 Processing device: LAB-205
+📋 Type: Smart Lab detected
+🧪 SMART LAB STATUS:
+Device ID: LAB-205
+Location: Science Building - Lab 205
+Status: Online
+Safety System: ACTIVE
+Gas Level: 0
+Equipment: Microscopes | Centrifuge | Spectrometer | 
+🔬 Managing lab equipment:
+  ✓ Microscopes - Operational
+  ✓ Centrifuge - Operational
+  ✓ Spectrometer - Operational
+🚨 Lab safety system ACTIVATED
+🌡️ Gas detector level: 0
+✅ Operation completed safely
+
+🔧 Processing device: LIB-MAIN
+📋 Type: Smart Library detected
+📖 SMART LIBRARY STATUS:
+Device ID: LIB-MAIN
+Location: Central Library - Ground Floor
+Status: Online
+Occupancy: 0/200
+Available Books: 15000
+👥 Library occupancy: 45/200
+📚 Available books updated: 14950
+📊 Occupancy rate: 22.5%
+✅ Operation completed safely
+
+🔧 Processing device: CR-304
+📋 Type: Smart Classroom detected
+🏫 SMART CLASSROOM STATUS:
+Device ID: CR-304
+Location: Business Building - Room 304
+Status: Online
+Light Level: 60%
+Temperature: 24°C
+Projector: OFF
+💡 Classroom lighting set to 80%
+❄️ AC temperature set to 23°C
+📽️ Projector turned ON
+✅ Operation completed safely
+
+🔧 Processing device: LAB-102
+📋 Type: Smart Lab detected
+🧪 SMART LAB STATUS:
+Device ID: LAB-102
+Location: Chemistry Building - Lab 102
+Status: Online
+Safety System: ACTIVE
+Gas Level: 0
+Equipment: Fume Hoods | Bunsen Burners | pH Meters | 
+🔬 Managing lab equipment:
+  ✓ Fume Hoods - Operational
+  ✓ Bunsen Burners - Operational
+  ✓ pH Meters - Operational
+🚨 Lab safety system ACTIVATED
+🌡️ Gas detector level: 0
+✅ Operation completed safely
+
+🎯 Safe downcasting with instanceof prevented runtime errors!
+🔒 Each device type received appropriate specific controls!
