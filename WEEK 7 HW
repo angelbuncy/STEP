@@ -1,0 +1,389 @@
+NATHALA ANGELNA SHARON 
+RA2411003011689
+
+POLYMORPHISM ASSIGNMENT (HW) PRACTICE PROBLEMS
+(Any 6)
+PROBLEM 1: Hotel Booking System
+Concept: Method Overloading
+You're building a hotel reservation system that calculates room prices in various ways:
+● Standard booking (just room type and nights)
+● Seasonal booking (room type, nights + seasonal multiplier)
+● Corporate booking (room type, nights + corporate discount + meal package)
+● Wedding package (room type, nights + guest count + decoration fee + catering
+options)
+Each calculation should display a detailed breakdown of costs and savings applied.
+Hint: Multiple ways to book the same room - let method signatures handle the
+complexity!
+CODE:
+class HotelBooking {
+    public void bookRoom(String room, int nights) {
+        double cost = nights * 100;
+        System.out.println("Standard: " + room + " x" + nights + " = $" + cost);
+    }
+    
+    public void bookRoom(String room, int nights, double seasonal) {
+        double cost = nights * 100 * seasonal;
+        System.out.println("Seasonal: " + room + " x" + nights + " x" + seasonal + " = $" + cost);
+    }
+    
+    public void bookRoom(String room, int nights, double discount, boolean meals) {
+        double cost = nights * 100 * (1-discount) + (meals ? 50 : 0);
+        System.out.println("Corporate: " + room + " discount:" + (discount*100) + "% meals:" + meals + " = $" + cost);
+    }
+    
+    public void bookRoom(String room, int nights, int guests, double decoration, String catering) {
+        double cost = nights * 100 + guests * 20 + decoration;
+        System.out.println("Wedding: " + room + " guests:" + guests + " decor:$" + decoration + " " + catering + " = $" + cost);
+    }
+    
+    public static void main(String[] args) {
+        HotelBooking hotel = new HotelBooking();
+        hotel.bookRoom("Deluxe", 3);
+        hotel.bookRoom("Suite", 2, 1.5);
+        hotel.bookRoom("Standard", 4, 0.2, true);
+        hotel.bookRoom("Presidential", 1, 50, 1000, "Premium");
+    }
+}
+
+OUTPUT:
+Standard: Deluxe x3 = $300.0
+Seasonal: Suite x2 x1.5 = $300.0
+Corporate: Standard discount:20.0% meals:true = $370.0
+Wedding: Presidential guests:50 decor:$1000.0 Premium = $2100.0
+
+PROBLEM 2: Online Learning Platform
+Concept: Method Overriding
+Create an educational content system where different course types display progress
+differently:
+● Video courses show completion percentage and watch time
+● Interactive courses show quiz scores and hands-on projects completed
+● Reading courses show pages read and note-taking progress
+● Certification courses show exam attempts and certification status
+All courses share basic info (title, instructor, enrollment date) but track and display
+progress uniquely
+Hint: Common learning foundation, specialized progress tracking per course
+type!
+CODE:
+abstract class Course {
+    String title, instructor, date;
+    Course(String t, String i, String d) { title=t; instructor=i; date=d; }
+    abstract void showProgress();
+}
+
+class VideoCourse extends Course {
+    int completion, watchTime;
+    VideoCourse(String t, String i, String d, int c, int w) { super(t,i,d); completion=c; watchTime=w; }
+    void showProgress() { System.out.println("Video: " + title + " - " + completion + "% complete, " + watchTime + "h watched"); }
+}
+
+class InteractiveCourse extends Course {
+    int quizScore, projects;
+    InteractiveCourse(String t, String i, String d, int q, int p) { super(t,i,d); quizScore=q; projects=p; }
+    void showProgress() { System.out.println("Interactive: " + title + " - Quiz:" + quizScore + "%, Projects:" + projects); }
+}
+
+class ReadingCourse extends Course {
+    int pages, notes;
+    ReadingCourse(String t, String i, String d, int p, int n) { super(t,i,d); pages=p; notes=n; }
+    void showProgress() { System.out.println("Reading: " + title + " - " + pages + " pages, " + notes + " notes"); }
+}
+
+class CertificationCourse extends Course {
+    int attempts; boolean certified;
+    CertificationCourse(String t, String i, String d, int a, boolean c) { super(t,i,d); attempts=a; certified=c; }
+    void showProgress() { System.out.println("Cert: " + title + " - Attempts:" + attempts + ", Certified:" + certified); }
+}
+
+class LearningPlatform {
+    public static void main(String[] args) {
+        Course[] courses = {
+            new VideoCourse("Java Basics", "John", "2025-01", 75, 12),
+            new InteractiveCourse("Web Dev", "Mary", "2025-02", 85, 3),
+            new ReadingCourse("Algorithms", "Bob", "2025-03", 150, 25),
+            new CertificationCourse("AWS", "Alice", "2025-04", 2, true)
+        };
+        for(Course c : courses) c.showProgress();
+    }
+}
+
+OUTPUT:
+Video: Java Basics - 75% complete, 12h watched
+Interactive: Web Dev - Quiz:85%, Projects:3
+Reading: Algorithms - 150 pages, 25 notes
+Cert: AWS - Attempts:2, Certified:true
+
+PROBLEM 3: Transportation Fleet Management
+Concept: Dynamic Method Dispatch
+Design a city transport system with different vehicle types:
+● Buses follow fixed routes and track passenger capacity
+● Taxis provide door-to-door service and calculate fare by distance
+● Trains operate on schedules and manage multiple car capacity
+● Bikes are available for short-distance eco-friendly trips
+Create a unified "dispatch" system where the same command produces appropriate
+transportation behavior based on vehicle type.
+Hint: One dispatch call, many transport solutions - runtime polymorphism in
+action!
+CODE:
+abstract class Vehicle {
+    String id;
+    Vehicle(String i) { id = i; }
+    abstract void dispatch();
+}
+
+class Bus extends Vehicle {
+    String route; int capacity;
+    Bus(String i, String r, int c) { super(i); route=r; capacity=c; }
+    void dispatch() { System.out.println("Bus " + id + " route:" + route + " capacity:" + capacity); }
+}
+
+class Taxi extends Vehicle {
+    double fare, distance;
+    Taxi(String i, double d) { super(i); distance=d; fare=d*2.5; }
+    void dispatch() { System.out.println("Taxi " + id + " distance:" + distance + "km fare:$" + fare); }
+}
+
+class Train extends Vehicle {
+    String schedule; int cars;
+    Train(String i, String s, int c) { super(i); schedule=s; cars=c; }
+    void dispatch() { System.out.println("Train " + id + " schedule:" + schedule + " cars:" + cars); }
+}
+
+class Bike extends Vehicle {
+    boolean eco; double distance;
+    Bike(String i, double d) { super(i); distance=d; eco=d<5; }
+    void dispatch() { System.out.println("Bike " + id + " distance:" + distance + "km eco:" + eco); }
+}
+
+class TransportSystem {
+    public static void main(String[] args) {
+        Vehicle[] fleet = {
+            new Bus("B001", "Downtown", 50),
+            new Taxi("T001", 8.5),
+            new Train("TR001", "Express", 12),
+            new Bike("BK001", 3.2)
+        };
+        for(Vehicle v : fleet) v.dispatch();
+    }
+}
+
+OUTPUT:
+Bus B001 route:Downtown capacity:50
+Taxi T001 distance:8.5km fare:$21.25
+Train TR001 schedule:Express cars:12
+Bike BK001 distance:3.2km eco:true
+
+PROBLEM 4: Hospital Management System
+Concept: Upcasting
+Build a hospital system managing different types of medical staff:
+● Doctors can diagnose patients, prescribe medicine, and perform surgeries
+● Nurses can administer medicine, monitor patients, and assist procedures
+● Technicians can operate equipment, run tests, and maintain instruments
+● Administrators can schedule appointments and manage records
+Design a general "MedicalStaff" system for common operations like shift scheduling, ID
+card access, and payroll processing.
+Hint: Different specialties, common professional needs - think institutional level!
+CODE:
+class MedicalStaff {
+    String name, id, shift;
+    MedicalStaff(String n, String i, String s) { name=n; id=i; shift=s; }
+    void commonOps() { System.out.println("Staff:" + name + " ID:" + id + " Shift:" + shift); }
+}
+
+class Doctor extends MedicalStaff {
+    String specialty;
+    Doctor(String n, String i, String s, String sp) { super(n,i,s); specialty=sp; }
+    void diagnose() { System.out.println("Dr." + name + " diagnosing in " + specialty); }
+}
+
+class Nurse extends MedicalStaff {
+    int patients;
+    Nurse(String n, String i, String s, int p) { super(n,i,s); patients=p; }
+    void monitor() { System.out.println("Nurse " + name + " monitoring " + patients + " patients"); }
+}
+
+class Technician extends MedicalStaff {
+    String equipment;
+    Technician(String n, String i, String s, String e) { super(n,i,s); equipment=e; }
+    void operate() { System.out.println("Tech " + name + " operating " + equipment); }
+}
+
+class Administrator extends MedicalStaff {
+    int appointments;
+    Administrator(String n, String i, String s, int a) { super(n,i,s); appointments=a; }
+    void schedule() { System.out.println("Admin " + name + " managing " + appointments + " appointments"); }
+}
+
+class HospitalSystem {
+    public static void main(String[] args) {
+        MedicalStaff[] staff = {
+            new Doctor("Smith", "D001", "Morning", "Cardiology"),
+            new Nurse("Johnson", "N001", "Night", 8),
+            new Technician("Brown", "T001", "Day", "X-Ray"),
+            new Administrator("Davis", "A001", "Full", 25)
+        };
+        for(MedicalStaff s : staff) s.commonOps();
+        
+        ((Doctor)staff[0]).diagnose();
+        ((Nurse)staff[1]).monitor();
+        ((Technician)staff[2]).operate();
+        ((Administrator)staff[3]).schedule();
+    }
+}
+
+OUTPUT:
+Staff:Smith ID:D001 Shift:Morning
+Staff:Johnson ID:N001 Shift:Night
+Staff:Brown ID:T001 Shift:Day
+Staff:Davis ID:A001 Shift:Full
+Dr.Smith diagnosing in Cardiology
+Nurse Johnson monitoring 8 patients
+Tech Brown operating X-Ray
+Admin Davis managing 25 appointments
+
+PROBLEM 5: Digital Art Gallery
+Concept: Downcasting
+Create an art gallery system handling different artwork types:
+● Paintings have brush techniques, color palettes, and frame specifications
+● Sculptures have material composition, dimensions, and lighting requirements
+● Digital art has resolution, file formats, and interactive elements
+● Photography has camera settings, editing details, and print specifications
+Sometimes curators need access to specific artwork features for exhibition planning.
+Hint: From general art piece to specific medium - unlock the details when needed!
+CODE:
+class Artwork {
+    String title, artist;
+    Artwork(String t, String a) { title=t; artist=a; }
+    void display() { System.out.println("Art: " + title + " by " + artist); }
+}
+
+class Painting extends Artwork {
+    String technique, palette, frame;
+    Painting(String t, String a, String tech, String p, String f) { 
+        super(t,a); technique=tech; palette=p; frame=f; 
+    }
+    void showDetails() { System.out.println("Painting: " + technique + ", " + palette + ", " + frame); }
+}
+
+class Sculpture extends Artwork {
+    String material, dimensions, lighting;
+    Sculpture(String t, String a, String m, String d, String l) { 
+        super(t,a); material=m; dimensions=d; lighting=l; 
+    }
+    void showDetails() { System.out.println("Sculpture: " + material + ", " + dimensions + ", " + lighting); }
+}
+
+class DigitalArt extends Artwork {
+    String resolution, format; boolean interactive;
+    DigitalArt(String t, String a, String r, String f, boolean i) { 
+        super(t,a); resolution=r; format=f; interactive=i; 
+    }
+    void showDetails() { System.out.println("Digital: " + resolution + ", " + format + ", interactive:" + interactive); }
+}
+
+class Photography extends Artwork {
+    String camera, editing, print;
+    Photography(String t, String a, String c, String e, String p) { 
+        super(t,a); camera=c; editing=e; print=p; 
+    }
+    void showDetails() { System.out.println("Photo: " + camera + ", " + editing + ", " + print); }
+}
+
+class ArtGallery {
+    public static void main(String[] args) {
+        Artwork[] gallery = {
+            new Painting("Mona Lisa", "Da Vinci", "Oil", "Earth tones", "Gold"),
+            new Sculpture("David", "Michelangelo", "Marble", "5.17m", "Spotlight"),
+            new DigitalArt("Cyber Dreams", "AI Artist", "4K", "PNG", true),
+            new Photography("Sunset", "Ansel Adams", "Canon", "B&W", "Large")
+        };
+        
+        for(Artwork art : gallery) {
+            art.display();
+            if(art instanceof Painting) ((Painting)art).showDetails();
+            else if(art instanceof Sculpture) ((Sculpture)art).showDetails();
+            else if(art instanceof DigitalArt) ((DigitalArt)art).showDetails();
+            else if(art instanceof Photography) ((Photography)art).showDetails();
+        }
+    }
+}
+
+OUTPUT:
+Art: Mona Lisa by Da Vinci
+Painting: Oil, Earth tones, Gold
+Art: David by Michelangelo
+Sculpture: Marble, 5.17m, Spotlight
+Art: Cyber Dreams by AI Artist
+Digital: 4K, PNG, interactive:true
+Art: Sunset by Ansel Adams
+Photo: Canon, B&W, Large
+
+PROBLEM 6: Smart Home Automation
+Concept: Safe Downcasting with instanceof
+Design a home automation system controlling various smart devices:
+● Smart TVs manage channels, volume, and streaming apps
+● Smart thermostats control temperature, humidity, and energy saving modes
+● Smart security systems handle cameras, alarms, and access controls
+● Smart kitchen appliances manage cooking times, temperatures, and recipes
+Process mixed device collections safely, applying appropriate controls without system
+crashes.
+Hint: Identify before you control - each device has its own smart features!
+
+CODE:
+class SmartDevice {
+    String id, location;
+    SmartDevice(String i, String l) { id=i; location=l; }
+    void status() { System.out.println("Device " + id + " at " + location); }
+}
+
+class SmartTV extends SmartDevice {
+    int channel, volume; String app;
+    SmartTV(String i, String l, int c, int v, String a) { super(i,l); channel=c; volume=v; app=a; }
+    void control() { System.out.println("TV: Channel " + channel + ", Volume " + volume + ", App: " + app); }
+}
+
+class SmartThermostat extends SmartDevice {
+    int temp, humidity; boolean eco;
+    SmartThermostat(String i, String l, int t, int h, boolean e) { super(i,l); temp=t; humidity=h; eco=e; }
+    void control() { System.out.println("Thermostat: " + temp + "°C, Humidity " + humidity + "%, Eco:" + eco); }
+}
+
+class SmartSecurity extends SmartDevice {
+    boolean camera, alarm, access;
+    SmartSecurity(String i, String l, boolean c, boolean a, boolean ac) { super(i,l); camera=c; alarm=a; access=ac; }
+    void control() { System.out.println("Security: Camera:" + camera + ", Alarm:" + alarm + ", Access:" + access); }
+}
+
+class SmartKitchen extends SmartDevice {
+    int timer, temp; String recipe;
+    SmartKitchen(String i, String l, int ti, int te, String r) { super(i,l); timer=ti; temp=te; recipe=r; }
+    void control() { System.out.println("Kitchen: Timer " + timer + "min, Temp " + temp + "°C, Recipe: " + recipe); }
+}
+
+class SmartHome {
+    public static void main(String[] args) {
+        SmartDevice[] devices = {
+            new SmartTV("TV01", "Living Room", 5, 20, "Netflix"),
+            new SmartThermostat("TH01", "Hall", 22, 45, true),
+            new SmartSecurity("SEC01", "Front Door", true, false, true),
+            new SmartKitchen("KIT01", "Kitchen", 30, 180, "Pizza")
+        };
+        
+        for(SmartDevice device : devices) {
+            device.status();
+            if(device instanceof SmartTV) ((SmartTV)device).control();
+            else if(device instanceof SmartThermostat) ((SmartThermostat)device).control();
+            else if(device instanceof SmartSecurity) ((SmartSecurity)device).control();
+            else if(device instanceof SmartKitchen) ((SmartKitchen)device).control();
+        }
+    }
+}
+
+OUTPUT:
+Device TV01 at Living Room
+TV: Channel 5, Volume 20, App: Netflix
+Device TH01 at Hall
+Thermostat: 22°C, Humidity 45%, Eco:true
+Device SEC01 at Front Door
+Security: Camera:true, Alarm:false, Access:true
+Device KIT01 at Kitchen
+Kitchen: Timer 30min, Temp 180°C, Recipe: Pizza
