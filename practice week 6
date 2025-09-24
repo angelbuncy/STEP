@@ -1,0 +1,123 @@
+POLYMORPHISM PRACTICE PROBLEMS
+Nathala Angelina Sharon RA2411003011689
+
+Learning Objectives Summary
+Problem 1 - Method Overloading (Compile-time Polymorphism)
+● Understanding method signatures and parameter differences
+● How compiler resolves overloaded methods at compile time
+● Practical application in gaming scenarios
+Ans :  class Game {
+    void attack(String weapon) {
+        System.out.println("Attacking with " + weapon);
+    }
+
+    void attack(String weapon, int power) {
+        System.out.println("Attacking with " + weapon + " at power level " + power);
+    }
+
+    public static void main(String[] args) {
+        Game g = new Game();
+        g.attack("Sword");
+        g.attack("Laser", 5);
+    }
+}
+
+Output: 
+C:\PolymorphismDemo>javac Game.java
+C:\PolymorphismDemo>java Game
+Attacking with Sword
+Attacking with Laser at power level 5
+
+
+
+Problem 2 - Method Overriding (Runtime Polymorphism)
+● Overriding inherited methods in subclasses
+● Using @Override annotation for clarity
+● Social media context makes concepts relatable
+
+Ans:class Post {
+    void share() {
+        System.out.println("Sharing a generic post");
+    }
+}
+
+class ImagePost extends Post {
+    @Override
+    void share() {
+        System.out.println("Sharing an image post");
+    }
+}
+
+public class SocialMedia {
+    public static void main(String[] args) {
+        Post p = new ImagePost();
+        p.share();
+    }
+}
+
+
+
+Output: 
+ C:\PolymorphismDemo>javac SocialMedia.java
+C:\PolymorphismDemo>java SocialMedia
+Sharing an image post
+
+Problem 3 - Dynamic Method Dispatch
+● How JVM resolves method calls at runtime
+● Understanding the difference between reference type and object type
+● Real-world food delivery scenario
+Ans: class Delivery {
+    void track() {
+        System.out.println("Tracking delivery");
+    }
+}
+
+class ExpressDelivery extends Delivery {
+    void track() {
+        System.out.println("Tracking express delivery with GPS");
+    }
+}
+
+public class FoodDelivery {
+    public static void main(String[] args) {
+        Delivery d = new ExpressDelivery(); // reference type: Delivery, object type: ExpressDelivery
+        d.track();
+    }
+}
+
+
+Output: 
+C:\PolymorphismDemo>javac FoodDelivery.java
+C:\PolymorphismDemo>java FoodDelivery
+Tracking express delivery with GPS
+
+Problem 4 - Upcasting
+● Safe conversion from subclass to superclass reference
+● Accessing inherited members through superclass reference
+● Understanding compile-time method binding limitations
+Ans: class Vehicle {
+    void start() {
+        System.out.println("Vehicle starting");
+    }
+}
+
+class Car extends Vehicle {
+    void honk() {
+        System.out.println("Car honking");
+    }
+}
+
+public class UpcastingDemo {
+    public static void main(String[] args) {
+        Vehicle v = new Car(); // Upcasting
+        v.start();             // Only superclass methods accessible
+        // v.honk();           // Compile-time error
+    }
+}
+
+
+Output:
+C:\PolymorphismDemo>javac UpcastingDemo.java
+C:\PolymorphismDemo>java UpcastingDemo
+Vehicle starting
+
